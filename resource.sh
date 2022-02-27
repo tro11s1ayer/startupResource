@@ -74,6 +74,7 @@ fi
 
 
 #Install/Update Python Packages/Libraries
+pip install --upgrade pip
 pip install theano pillow opencv-python qiskit tensorflow keras scipy sklearn scikit-learn jupyter numpy matplotlib paramiko
 pip list | tail -n +3 | cut -d ' ' -f 1 | xargs pip install --upgrade
 

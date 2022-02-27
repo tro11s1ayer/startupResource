@@ -1,5 +1,7 @@
 #!/usr/bin/sh
 
+export PRIVATE_IP=$(hostname -I | awk '{print $1}')
+
 #Update Repositories
 apt update
 

@@ -75,7 +75,7 @@ fi
 
 #Install/Update Python Packages/Libraries
 pip install theano pillow opencv-python qiskit tensorflow keras scipy sklearn scikit-learn jupyter numpy matplotlib paramiko
-pip list | grep -v "Package" | grep -v "-" | cut -d ' ' -f 1 | xargs pip install --upgrade
+pip list | tail -n +3 | cut -d ' ' -f 1 | xargs pip install --upgrade
 
 #Configure SMB Server
 

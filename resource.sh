@@ -1,5 +1,8 @@
 #!/usr/bin/sh
 
+cat /etc/apt/sources.list | sed -e 's/http:/https:/'
+cat /etc/apt/sources.list.d/* | sed -e 's/http:/https:/'
+
 export PRIVATE_IP=$(hostname -I | awk '{print $1}')
 
 #Update Repositories

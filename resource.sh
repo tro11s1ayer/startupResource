@@ -126,7 +126,7 @@ snap install dotnet-sdk --classic --channel=6.0
 snap install dotnet-runtime-60 --classic
 snap alias dotnet-runtime-60.dotnet dotnet60
 snap alias dotnet-sdk.dotnet dotnet
-export DOTNET_ROOT=/snap/dotnet-sdk/current' >> ~/.bashrc
+export DOTNET_ROOT=/snap/dotnet-sdk/current'
 echo 'export DOTNET_ROOT=/snap/dotnet-sdk/current' >> ~/.bashrc
 
 curl -o /usr/local/bin/nuget.exe https://dist.nuget.org/win-x86-commandline/latest/nuget.exe

@@ -78,20 +78,21 @@ fi
 #Install/Update Python Packages/Libraries
 pip install --upgrade pip
 pip install theano pillow opencv-python qiskit tensorflow keras scipy sklearn scikit-learn jupyter numpy matplotlib paramiko
-pip list | tail -n +3 | cut -d ' ' -f 1 | xargs pip install --upgrade
+
+for OUTPUT in $(pip list | tail -n +3 | cut -f 1 -d ' ')
+do
+	pip install --upgrade on $OUTPUT
+done
+
 
 #Configure SMB Server
-
 echo "[HTTP-Server] \n
 \tcomment = HTTP-Server \n
 \tpath = /var/www/html/ \n
 \tread only = no \n
 \tbrowsable = yes" >> /etc/samba/smb.conf
-
 ufw allow samba
 smbpasswd -c /etc/samba/smb.conf -a $USER
-/etc/init.d/smbd restart
-
 SMB_STATUS="$(/etc/init.d/smbd status | grep 'Active' | cut -d ':' -f 2 | cut -d ' ' -f 2,3)"
 if [$SMB_STATUS != "active (running)"]; then
 	#Do something with SMB Server

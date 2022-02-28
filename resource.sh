@@ -1,7 +1,7 @@
 #!/usr/bin/sh
 
-cat /etc/apt/sources.list | sed -e 's/http:/https:/'
-cat /etc/apt/sources.list.d/* | sed -e 's/http:/https:/'
+cat /etc/apt/sources.list | sed -e 's/http:/https:/g'
+cat /etc/apt/sources.list.d/* | sed -e 's/http:/https:/g'
 
 chmod 0755 /usr/bin/pkexec
 

@@ -113,9 +113,9 @@ fi
 apt dist-upgrade -y
 
 #Disable IPv6 networking
-echo "net.ipv6.conf.all.disable_ipv6=1" >> /etc/sysctl.conf
-echo "net.ipv6.conf.default.disable_ipv6=1" >> /etc/sysctl.conf
-echo "net.ipv6.conf.lo.disable_ipv6=1" >> /etc/sysctl.conf
+sed -e "s/#net.ipv6.conf.all.disable_ipv6=1/net.ipv6.conf.all.disable_ipv6=1/g" /etc/sysctl.conf
+sed -e "s/#net.ipv6.conf.default.disable_ipv6=1/net.ipv6.conf.default.disable_ipv6=1" /etc/sysctl.conf
+sed -e "s/#net.ipv6.conf.lo.disable_ipv6=1/net.ipv6.conf.lo.disable_ipv6=1/g" /etc/sysctl.conf
 
 sysctl -w net.ipv6.conf.all.disable_ipv6=1
 sysctl -w net.ipv6.conf.default.disable_ipv6=1

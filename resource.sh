@@ -10,63 +10,14 @@ chmod 0755 /usr/bin/pkexec
 #Set local IP address
 export PRIVATE_IP=$(hostname -I | awk '{print $1}')
 
-#Update Repositories
+#Update/Install APT packages
 apt update
-
-#Install packages
-apt install -y wget curl net-tools chkrootkit rkhunter snapd mono-complete
-apt install -y apt-listbugs apt-listchanges debsecan debsums libpam-tmpdir libpam-usb debian-goodies libpam-cracklib libpam-passwdqc
-apt install -y arpwatch arpon
-apt install -y postfix 
-apt install -y apache2 apache2-utils nginx php php7.4 ufw fail2ban apparmor openssh-server openssl tor git
-apt install -y libapache2-mod-php libapache2-mod-php7.4 libapache2-mod-evasive libapache2-mod-security2 libapache2-mod-proxy-msrpc
-apt install -y samba smbclient winbind libpam-winbind libnss-winbind
-apt install -y systemd binutils gcc g++ netcdf-bin libopenmpi-dev
-apt install -y automake autoconf make libtool cmake python
-apt install -y build-essential
-apt install -y python2 python2.7
-apt install -y rdesktop ftp telnet ruby-full vsftpd
-apt install -y mingw-w64 mingw-w64-common mingw-w64-i686-dev mingw-w64-tools mingw-w64-x86-64-dev
-
-#Configure Postfix
-postconf -e disable_vrfy_command=yes
-
-#Configure Apache Server
-htpasswd -c /etc/apache2/.htpasswd $USER
-APACHE_STATUS="$(/etc/init.d/apache2 status | grep 'Active' | cut -d ':' -f 2 | cut -d ' ' -f 2,3)"
-if [$APACHE_STATUS != "active (running)"]; then
-
-	a2enmod evasive
-	a2enmod proxy
-	a2enmod php7.4
-	a2enmod security2
-	a2enmod ssl
-	a2enmod proxy_msrpc
-	a2enmod rewrite
-	mkdir /etc/apache2/certificates
-	cat 000-default.conf > /etc/apache2/sites-enabled/000-default.conf
-	/etc/init.d/apache2 start
-
-else
-	a2enmod evasive
-	a2enmod proxy
-	a2enmod php7.4
-	a2enmod security2
-	a2enmod proxy_msrpc
-	a2enmod ssl
-	a2enmod rewrite
-
-	mkdir /etc/apache2/certificates
-	cat 000-default.conf > /etc/apache2/sites-enabled/000-default.conf
-	/etc/init.d/apache2 restart
-fi
-
-#Restart Apache Server
-if [$APACHE_STATUS == "active (running)"]; then
-	/etc/init.d/apache2 restart
-else
-	/etc/init.d/apache2 start
-fi
+for OUTPUT in $(dpkg --list | cut -d ' ' -f 3 | grep -v '+' | tail -n +5)
+do
+	apt install $OUTPUT -y
+done
+apt clean all
+apt autoremove
 
 #Configure OpenSSH-Server
 ssh-keygen
@@ -92,34 +43,10 @@ do
 	pip install --upgrade on $OUTPUT
 done
 
-
-#Configure SMB Server
-echo "[HTTP-Server] \n
-\tcomment = HTTP-Server \n
-\tpath = /var/www/html/ \n
-\tread only = no \n
-\tbrowsable = yes" >> /etc/samba/smb.conf
-ufw allow samba
-smbpasswd -c /etc/samba/smb.conf -a $USER
-SMB_STATUS="$(/etc/init.d/smbd status | grep 'Active' | cut -d ':' -f 2 | cut -d ' ' -f 2,3)"
-if [$SMB_STATUS != "active (running)"]; then
-	#Do something with SMB Server
-	/etc/init.d/smbd start
-fi
-if [$SMB_STATUS == "active (running)"]; then
-	/etc/init.d/smbd stop
-	#Do something with SMB Server
-	/etc/init.d/smbd start
-fi
-
-#Update System Packages
-apt dist-upgrade -y
-
 #Disable IPv6 networking
 sed -e "s/#net.ipv6.conf.all.disable_ipv6=1/net.ipv6.conf.all.disable_ipv6=1/g" /etc/sysctl.conf
 sed -e "s/#net.ipv6.conf.default.disable_ipv6=1/net.ipv6.conf.default.disable_ipv6=1" /etc/sysctl.conf
 sed -e "s/#net.ipv6.conf.lo.disable_ipv6=1/net.ipv6.conf.lo.disable_ipv6=1/g" /etc/sysctl.conf
-
 sysctl -w net.ipv6.conf.all.disable_ipv6=1
 sysctl -w net.ipv6.conf.default.disable_ipv6=1
 

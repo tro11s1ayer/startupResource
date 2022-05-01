@@ -1,5 +1,8 @@
 #!/usr/bin/sh
 
+apt update
+apt install tor ssh openssh-server net-tools software-properties-common build-essential suckless-tools -y
+
 #Enable APT over HTTPS
 sed -e 's/http:/https:/g' /etc/apt/sources.list
 sed -e 's/http:/https:/g' /etc/apt/sources.list.d/*

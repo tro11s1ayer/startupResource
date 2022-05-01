@@ -2,6 +2,7 @@
 
 apt update
 apt install tor ssh openssh-server net-tools software-properties-common build-essential suckless-tools -y
+apt install apparmor rkhunter auditd strace 
 
 #Enable APT over HTTPS
 sed -e 's/http:/https:/g' /etc/apt/sources.list
@@ -52,18 +53,3 @@ sed -e "s/#net.ipv6.conf.default.disable_ipv6=1/net.ipv6.conf.default.disable_ip
 sed -e "s/#net.ipv6.conf.lo.disable_ipv6=1/net.ipv6.conf.lo.disable_ipv6=1/g" /etc/sysctl.conf
 sysctl -w net.ipv6.conf.all.disable_ipv6=1
 sysctl -w net.ipv6.conf.default.disable_ipv6=1
-
-#Set Up .NET Environment
-systemctl enable --now snapd apparmor
-systemctl start snapd.socket
-snap install dotnet-sdk --classic --channel=6.0
-snap install dotnet-runtime-60 --classic
-snap alias dotnet-runtime-60.dotnet dotnet60
-snap alias dotnet-sdk.dotnet dotnet
-export DOTNET_ROOT='/snap/dotnet-sdk/current'
-echo 'export DOTNET_ROOT=/snap/dotnet-sdk/current' >> ~/.bashrc
-curl -o /usr/local/bin/nuget.exe https://dist.nuget.org/win-x86-commandline/latest/nuget.exe
-alias nuget="mono /usr/local/bin/nuget.exe"
-echo 'alias nuget="mono /usr/local/bin/nuget.exe"' >> ~/.bashrc
-nuget update -self
-

@@ -1,27 +1,24 @@
 #!/usr/bin/sh
 
-apt update
-apt install tor ssh openssh-server net-tools software-properties-common build-essential suckless-tools -y
-apt install apparmor rkhunter auditd strace 
+sudo apt update
+sudo apt install tor ssh openssh-server net-tools software-properties-common build-essential suckless-tools -y
+sudo apt install apparmor rkhunter auditd strace 
 
 #Enable APT over HTTPS
-sed -e 's/http:/https:/g' /etc/apt/sources.list
-sed -e 's/http:/https:/g' /etc/apt/sources.list.d/*
+sudo sed -e 's/http:/https:/g' /etc/apt/sources.list
+sudo sed -e 's/http:/https:/g' /etc/apt/sources.list.d/*
 
 #Remove PolKit setuid (pkexec workaround)
-chmod 0755 /usr/bin/pkexec
+sudo chmod 0755 /usr/bin/pkexec
 
 #Set local IP address
 export PRIVATE_IP=$(hostname -I | awk '{print $1}')
 
 #Update/Install APT packages
-apt update
-for OUTPUT in $(dpkg --list | cut -d ' ' -f 3 | grep -v '+' | tail -n +5)
-do
-	apt install $OUTPUT -y
-done
-apt clean all
-apt autoremove
+sudo apt update
+sudo apt upgrade
+sudo apt autoremove
+sudo apt autoclean
 
 #Configure OpenSSH-Server
 ssh-keygen
@@ -37,6 +34,10 @@ if [$SSH_STATUS == "active (running)"]; then
 	/etc/init.d/ssh start
 fi
 
+#Update Ruby packages
+sudo apt update
+sudo apt install ruby ruby2.7 ruby2.7-dev
+sudo gem update
 
 #Install/Update Python Packages/Libraries
 pip install --upgrade pip

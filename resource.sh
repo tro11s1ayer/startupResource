@@ -25,13 +25,13 @@ ssh-keygen
 
 SSH_STATUS="$(/etc/init.d/ssh status | grep 'Active' | cut -d ':' -f 2 | cut -d ' ' -f 2,3)"
 if [$SSH_STATUS != "active (running)"]; then
-	dpkg-reconfigure openssh-server
+	sudo dpkg-reconfigure openssh-server
 	/etc/init.d/ssh reload
 fi
 if [$SSH_STATUS == "active (running)"]; then
-	/etc/init.d/ssh stop
-	dpkg-reconfigure openssh-server
-	/etc/init.d/ssh start
+	sudo /etc/init.d/ssh stop
+	sudo dpkg-reconfigure openssh-server
+	sudo /etc/init.d/ssh start
 fi
 
 #Update Ruby packages

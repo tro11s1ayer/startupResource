@@ -49,8 +49,9 @@ do
 done
 
 #Disable IPv6 networking
-sudo sed -e "s/#net.ipv6.conf.all.disable_ipv6=1/net.ipv6.conf.all.disable_ipv6=1/g" /etc/sysctl.conf
-sudo sed -e "s/#net.ipv6.conf.default.disable_ipv6=1/net.ipv6.conf.default.disable_ipv6=1" /etc/sysctl.conf
-sudo sed -e "s/#net.ipv6.conf.lo.disable_ipv6=1/net.ipv6.conf.lo.disable_ipv6=1/g" /etc/sysctl.conf
+sudo echo 'net.ipv6.conf.all.disable_ipv6=1' >> /etc/sysctl.conf
+sudo echo 'net.ipv6.conf.default.disable_ipv6=1' >> /etc/sysctl.conf
+sudo echo 'net.ipv6.conf.lo.disable_ipv6=1' >. /etc/sysctl.conf
 sudo sysctl -w net.ipv6.conf.all.disable_ipv6=1
 sudo sysctl -w net.ipv6.conf.default.disable_ipv6=1
+sudo sysctl -w net.ipv6.conf.lo.disable_ipv6=1

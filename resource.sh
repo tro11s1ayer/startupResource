@@ -45,7 +45,7 @@ pip install theano pillow opencv-python qiskit tensorflow keras scipy sklearn sc
 
 for OUTPUT in $(pip list | tail -n +3 | cut -f 1 -d ' ')
 do
-	pip install --upgrade on $OUTPUT
+	pip install $OUTPUT --upgrade
 done
 
 #Disable IPv6 networking
